@@ -2,9 +2,9 @@ function [Xplot,Yplot,U_final_phys] = IVPsolver(v,epsilon,Nx,Ny,t_end,dt,dtout,z
 
 % Domain and resolution
 % v, epsilon     - parameters
-% Nx = 40;            % Number of Chebyshev points in x
-% Ny = 30;            % Number of Fourier cosine modes in y
-% t_end = 1.0;        % Final time
+% Nx;            % Number of Chebyshev points in x
+% Ny;            % Number of Fourier cosine modes in y
+% t_end;        % Final time
 % dt = timestep
 % dtout = output time step
 %

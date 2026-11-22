@@ -137,10 +137,7 @@ if plotflag
 
         % Plotting
         subplot(num_rows, num_cols, i);
-        % subplot(1,2,2)
         surf(x_grid, y_grid/pi, real(V_phys)','EdgeColor','none','FaceColor','interp');
-        % contourf(x_grid, y_grid/2/pi, V_phys', 20, 'LineColor', 'none');
-        % colorbar
         view(-45,30)
         ylim([0 1])
 
@@ -148,7 +145,6 @@ if plotflag
         ylabel('\phi/\pi');
         xlabel('x');
         zlabel('p(x,\phi)')
-        % axis image
         set(gca, 'FontSize', 18);
 
         % Clean formatting for eigenvalues (handling purely real vs complex)
