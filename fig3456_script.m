@@ -1,11 +1,11 @@
-epsilon = 1;
+epsilon = 0.1;
 v = [0.1 1 10]; 
 figure(2),clf
 for k = 1:3
-    [lambda, x_grid, y_grid, u] = findevs(epsilon, v(k), 250, 50, 2, false, true, false);
+    [lambda, x_grid, y_grid, u] = findevs(epsilon, v(k), max(250,5*ceil(sqrt(v(k)/epsilon))), 50, 2, false, true, false);
     figure(2)
     subplot(2,3,k)
-    surf(x_grid, y_grid/pi, u{1}','EdgeColor','none','FaceColor','interp');
+    surf(x_grid, y_grid/pi, real(u{1})','EdgeColor','none','FaceColor','interp');
     view(-45,30)
     ylim([0 1])
     if v(k)==1
@@ -23,7 +23,7 @@ for k = 1:3
     ylim([0 1])
 
     subplot(2,3,k+3)
-    surf(x_grid, y_grid/pi, u{2}','EdgeColor','none','FaceColor','interp');
+    surf(x_grid, y_grid/pi, real(u{2})','EdgeColor','none','FaceColor','interp');
     view(-45,30)
     ylim([0 1])
     set(gca,'YDir','normal')

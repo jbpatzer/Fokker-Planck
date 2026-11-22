@@ -1,4 +1,4 @@
-function IVPsolver(v,epsilon,Nx,Ny,t_end,dt,dtout,zmax,moviefile,movietime)
+function [Xplot,Yplot,U_final_phys] = IVPsolver(v,epsilon,Nx,Ny,t_end,dt,dtout,zmax,moviefile,movietime)
 
 % Domain and resolution
 % v, epsilon     - parameters
@@ -7,11 +7,8 @@ function IVPsolver(v,epsilon,Nx,Ny,t_end,dt,dtout,zmax,moviefile,movietime)
 % t_end = 1.0;        % Final time
 % dt = timestep
 % dtout = output time step
-
-figure(1),clf
-subplot(1,2,2)
-findevs(epsilon,v,Nx,Ny,1,false,true,false);
-drawnow
+%
+% IVPsolver(1,0.001,150,50,3.5,0.0025,0.005,[],'movie',60); generates the movie linked in the paper.
 
 if ~isempty(moviefile)
     set(gca,'nextplot','replacechildren');
@@ -22,9 +19,6 @@ if ~isempty(moviefile)
 else
     mv = [];
 end
-
-% Initial conditions
-IC_func = @(x, y) 0.1*exp(-100*((x - 0.5).^2+(y/2/pi-0.5).^2));
 
 % =========================================================================
 % 1. SPATIAL DISCRETIZATION (x-direction: Chebyshev)
@@ -114,7 +108,8 @@ y = pi * (0:Ny-1)' / (Ny-1);
 [X_grid, Y_grid] = ndgrid(x, y);
 Xplot = [X_grid X_grid(:,Ny-1:-1:1)];
 Yplot = [Y_grid 2*pi-Y_grid(:,Ny-1:-1:1)];
-U_phys = IC_func(X_grid, Y_grid); % physical values [Nx by Ny]
+r0 = 0.1; x0 = 0.75; y0 = 0.5*pi;
+U_phys = exp(-((X_grid-x0).^2+(Y_grid-y0).^2/pi^2)/r0^2)/pi/r0^2; % initial condition
 
 % Transform physical values to Fourier Cosine coefficients
 % T relates coefficients to physical space: U_phys = U_mat * T'
@@ -125,7 +120,7 @@ U_mat = U_phys / T.';
 U = U_mat(:);
 
 figure(1)
-subplot(1,2,1)
+% subplot(1,2,1)
 U0 = reshape(U, Nx, Ny);
 U0 = U0 * T.';
 output(Xplot,Yplot,U0,Ny,zmax,0)
@@ -158,8 +153,7 @@ while t<=t_end
         % =========================================================================
         U_mat = reshape(U, Nx, Ny);
         U_final_phys = U_mat * T.';
-        figure(1)
-        subplot(1,2,1)
+        figure(1),clf
         output(Xplot,Yplot,U_final_phys,Ny,zmax,t)
         tout = tout-dtout;
 
@@ -175,12 +169,18 @@ end
 
 %%
 function output(X,Y,U,Ny,zmax,t)
-surf(X,Y/2/pi,[U U(:,Ny-1:-1:1)], 'EdgeColor', 'interp');
+surf(X,Y/pi,[U U(:,Ny-1:-1:1)],'EdgeColor','none','FaceColor','interp');
 xlim([0 1])
 ylim([0 1])
-zlim([0 zmax])
-xlabel('x'); ylabel('\phi/2\pi'); zlabel('p(x,\phi,t)');
-title(sprintf('t = %.2f', t));
+if isempty(zmax)
+    zlim([-1e-3 1.1*max(U(:))])
+else
+    zlim([-1e-3 zmax])
+end
+xlabel('$x$','interpreter','latex'); 
+ylabel('$\phi/\pi$','interpreter','latex'); 
+zlabel('$p(x,\phi,t)$','interpreter','latex');
+title(sprintf('$t = %.2f$', t),'interpreter','latex');
 set(gca, 'FontSize', 18);
 view([-45, 30]);
 drawnow

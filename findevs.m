@@ -121,26 +121,24 @@ if plotflag
     figure(1),clf
 
     for i = 1:num_modes
-        % Normalize phase so the maximum amplitude is real and positive
-        [~, max_idx] = max(abs(V_full(:, i)));
-        phase_angle = angle(V_full(max_idx, i));
-        V_corrected = V_full(:, i) * exp(-1i * phase_angle);
 
         % Reshape to Nx x Ny (rows = x-direction, cols = y-direction modes) and normalise
-        V_hat = reshape(V_corrected, Nx, Ny);
-        V_hat = V_hat/l2_norm_eigenfunction(V_hat, Nx, Ny, x_grid, idx_I, idx_B, B_BB, B_BI);
+        V_hat = reshape(V_full(:,i), Nx, Ny);
 
         % Transform Fourier modes back to physical space in y
         V_phys = real(V_hat * C_trans.');
-        V_phys = V_phys*sign(max(real(V_phys(:))));
+        % % Normalize so the maximum amplitude is real and positive
+        V_phys = V_phys/l2_norm_eigenfunction(V_hat, Nx, Ny, x_grid, idx_I, idx_B, B_BB, B_BI);
+        [~, max_idx] = max(abs(V_phys(:)));
+        phase_angle = angle(V_phys(max_idx));
+        V_phys = V_phys * exp(-1i * phase_angle);
+
         Vout{i} = V_phys;
-        % [~,kk] = max(abs(real(V_phys(:))));
-        % V_phys = V_phys/real(V_phys(kk));
 
         % Plotting
         subplot(num_rows, num_cols, i);
         % subplot(1,2,2)
-        surf(x_grid, y_grid/pi, V_phys','EdgeColor','none','FaceColor','interp');
+        surf(x_grid, y_grid/pi, real(V_phys)','EdgeColor','none','FaceColor','interp');
         % contourf(x_grid, y_grid/2/pi, V_phys', 20, 'LineColor', 'none');
         % colorbar
         view(-45,30)
@@ -148,7 +146,7 @@ if plotflag
         % Formatting
         ylabel('\phi/\pi');
         xlabel('x');
-        zlabel('\Phi(x,\phi)')
+        zlabel('p(x,\phi)')
         % axis image
         set(gca, 'FontSize', 18);
 
