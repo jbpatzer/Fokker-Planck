@@ -2,3 +2,5 @@ convergence_test.eps
 *.eps
 *.fig
 *.mat
+*.png
+*.mp4
