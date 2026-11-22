@@ -1,14 +1,14 @@
-l = zeros(1,100); Nx0 = 5;
+l = zeros(1,100); Nphi0 = 3;
 format compact
-Nx = Nx0:5:100; N = length(Nx);
+Nphi = Nphi0:50; N = length(Nphi);
 for i = 1:N
-    l0 = findevs(0.01, 1, Nx(i), 25 , 12, false, true, false);
-    l(i) = l0(8);
-    disp([Nx(i) l0(8)-4])
+    l0 = findevs(0.001, 0.1, 2*Nphi(i), Nphi(i) , 11, false, true, false);
+    l(i) = l0(11);
+    disp([Nphi(i) l0(11)-1])
 end
 figure(1),clf
-semilogy(Nx,abs(l(1:N)-4),'ok')
+semilogy(Nphi,abs(l(1:N)-1),'ok')
 grid on
-xlabel('$N_x$','interpreter','latex')
-ylabel('$|\lambda_8-1|$','interpreter','latex')
+xlabel('$N_{\phi}$','interpreter','latex')
+ylabel('$|\lambda_{10}-1|$','interpreter','latex')
 set(gca, 'FontSize', 18);
