@@ -12,7 +12,7 @@ Additional functions used by these codes are:
 
 Cheb.m - calculate the Chebyshev differentiation matrix
 
-findl1.m - Determine the line in (epsilon,v) parameter space where the second and third eigenvalues of (EP) are $\lambda_1=\lambda_2=1$.
+findl1.m - Determine the line in $(\epsilon,v)$-parameter space where the second and third eigenvalues of (EP) are $\lambda_1=\lambda_2=1$.
 
 The plots in the paper can be reproduced using fig1_script.m, fig2_script.m, fig3456_script.m and convergence_test.m.
 
